@@ -2,6 +2,7 @@ import * as fs  from 'fs';
 import * as child_process from 'child_process';
 
 
+
 export class apiService {
     constructor(){
 
@@ -21,7 +22,15 @@ export class apiService {
     }
     getScreenshot(){
         return new Promise((resolve, reject) => {
-            resolve('Device Screenshot requested...');
+            child_process.exec('xwd -root -display :0.0 | convert xwd:- /home/pi/screenshot.png', (err, stdout, stderr) => {
+                if (err) {
+                    console.error(`An error occured: ${stderr}`)
+                    reject("There was an error generating a screenshot.  Please try again later.");
+                }
+                else {
+                    resolve('/home/pi/screenshot.png');
+                }
+            });            
         });
         
     }
