@@ -23,13 +23,15 @@ router.get('/v1', async (req, res, next) => {
             break;
         case "getDeviceTime":
             worker.getDeviceTime().then((r) => {
-                res.status(200);
-                res.sendFile(r);
+                res.status(200).json({ status: "OK" });
             })
                 .catch(e => res.status(500).json({ error: e }));
             break;
         case "getScreenshot":
-            worker.getScreenshot().then((r) => res.status(200).json({ status: r })).catch(e => res.status(500).json({ error: e }));
+            worker.getScreenshot().then((r) => {
+                res.status(200).sendFile(r);
+            })
+                .catch(e => res.status(500).json({ error: e }));
             break; 
         default: 
             res.status(501).json({ error: "Server does not support method: " + request });
