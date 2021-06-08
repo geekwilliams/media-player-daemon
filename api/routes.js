@@ -22,10 +22,14 @@ router.get('/v1', async (req, res, next) => {
             worker.getDeviceUUID().then(r => res.status(200).json({ uuid: r })).catch(e => res.status(500).json({ error: e }));
             break;
         case "getDeviceTime":
-            worker.getDeviceTime().then(r => res.status(200).json({ deviceTime: r})).catch(e => res.status(500).json({ error: e }));
+            worker.getDeviceTime().then((r) => {
+                res.status(200);
+                res.sendFile(r);
+            })
+                .catch(e => res.status(500).json({ error: e }));
             break;
         case "getScreenshot":
-            worker.getScreenshot().then((r) => res.status(200).json({ status: r })).catch(e => res.status(500).json({ error: e}));
+            worker.getScreenshot().then((r) => res.status(200).json({ status: r })).catch(e => res.status(500).json({ error: e }));
             break; 
         default: 
             res.status(501).json({ error: "Server does not support method: " + request });
@@ -37,7 +41,7 @@ router.get('/v1', async (req, res, next) => {
 });
 
 router.post('/v1', async (req, res, next) => {
-    
+
 });
 
 export { router, app };
