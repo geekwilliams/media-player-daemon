@@ -28,9 +28,8 @@ router.get('/v1', async (req, res, next) => {
                 .catch(e => res.status(500).json({ error: e }));
             break;
         case "getScreenshot":
-            worker.getScreenshot().then((r) => {
-                res.status(200).sendFile(r);
-            })
+            worker.getScreenshot()
+                .then((r) => { res.status(200).sendFile(r).catch(e => console.error(e)); console.log('This is past the getScreenshot res...') })
                 .catch(e => res.status(500).json({ error: e }));
             break; 
         default: 
@@ -39,11 +38,8 @@ router.get('/v1', async (req, res, next) => {
     }
 
     //res.status(200).json({ response: "OK", requestWas: request });
-    next();
+    //next();
 });
 
-router.post('/v1', async (req, res, next) => {
-
-});
 
 export { router, app };
