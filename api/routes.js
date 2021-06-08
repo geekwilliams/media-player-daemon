@@ -1,9 +1,10 @@
-import e from 'express';
+import e, { request } from 'express';
 import express from 'express';
-//import { bodyParser } from 'body-parser';
 import { apiService } from './apiService.js';
 
 let app = express();
+
+app.use(express.json());
 
 let worker = new apiService();
 
@@ -14,10 +15,13 @@ router.use('/', (req, res, next) => {
     next();
 });
 
-router.get('/v1', async (req, res, next) => {
+router.get('/v1', (req, res, next) => {
     let request = req.query.r;
     // deal with all get requests
     switch(request) {
+        case "getDeviceInfo":
+            worker.getDeviceInfo().then(r => res.status(200).json(r)).catch(e => res.status(500).json({ error: e }));
+            break;
         case "getDeviceUUID":
             worker.getDeviceUUID().then(r => res.status(200).json({ uuid: r })).catch(e => res.status(500).json({ error: e }));
             break;
@@ -38,8 +42,22 @@ router.get('/v1', async (req, res, next) => {
     }
 
     //res.status(200).json({ response: "OK", requestWas: request });
-    //pnext();
+    //next();
 });
 
+router.post('/v1', (req, res, next) =>{
+    let request = req.query.r;
+    let requestBody = req.body;
+    
+    switch(request) {
+        case "setDeviceUUID":
+            worker.setDeviceUUID(requestBody.uuid)
+                .then(r => res.status(200).json({ id: r, status: "OK" }))
+                .catch(e => res.status(500).json({ error: e }));
+            break;
+        default: 
+            res.status(501).json({ error: "Server does not support POST method: " + request});
+    }
 
+});
 export { router, app };
