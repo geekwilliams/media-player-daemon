@@ -30,10 +30,7 @@ export class apiService {
                 else {
                     resolve('/home/pi/screenshot.png');
                 }
-
-                
             });            
-            resolve('Device Screenshot requested...');
         });
         
     }
