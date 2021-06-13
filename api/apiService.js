@@ -1,7 +1,7 @@
 import fs from 'fs';
 import * as child_process from 'child_process';
 import e from 'express';
-
+import { rconfig, wconfig } from '../utils/mconfig.js';
 
 
 export class apiService {
